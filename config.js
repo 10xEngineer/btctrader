@@ -22,7 +22,7 @@ config.debug = true; // for additional logging / debugging
 // Monitor the live market
 config.watch = {
   enabled: true,
-  exchange: 'Bitstamp', // 'MtGox', 'BTCe', 'Bitstamp', 'cexio' or 'kraken'
+  exchange: 'BTCe', //'Bitstamp', 'MtGox', 'BTCe', 'Bitstamp', 'cexio' or 'kraken'
   currency: 'USD',
   asset: 'BTC'
 }
@@ -32,7 +32,7 @@ config.watch = {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 config.tradingAdvisor = {
-  enabled: true,
+  enabled: false,
   method: 'DEMA',
   candleSize: 60,
   historySize: 50
@@ -118,12 +118,12 @@ config.trader = {
 }
 
 config.adviceLogger = {
-  enabled: true
+  enabled: false
 }
 
 // do you want Gekko to calculate the profit of its own advice?
 config.profitSimulator = {
-  enabled: true,
+  enabled: false,
   // report the profit in the currency or the asset?
   reportInCurrency: true,
   // start balance, on what the current balance is compared with
@@ -195,7 +195,7 @@ config.campfire = {
 }
 
 config.redisBeacon = {
-  enabled: false,
+  enabled: true,
   port: 6379, // redis default
   host: '127.0.0.1', // localhost
     // On default Gekko broadcasts
@@ -203,9 +203,9 @@ config.redisBeacon = {
     // the name of the event, set
     // an optional prefix to the
     // channel name.
-  channelPrefix: '',
+  channelPrefix: 'gekko',
   broadcast: [
-    'small candle'
+    'trade'
   ]
 }
 

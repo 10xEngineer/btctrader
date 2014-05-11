@@ -1,0 +1,46 @@
+extends layout
+
+block content
+    .container-fluid
+      include header
+      //include _sidebar
+      //include dashboard
+      
+       h2.sub-header Trades
+         .table-responsive
+           table.table.table-bordered.datagrid#BTCeGrid
+
+    script(src="/socket.io/socket.io.js")
+    // jQuery (necessary for Bootstrap's JavaScript plugins)
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    // Include all compiled plugins (below), or include individual files as needed
+    // Latest compiled and minified CSS
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
+    // Optional theme
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css')
+    link(href="//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css", rel="stylesheet")
+    link(href="//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css", rel="stylesheet")
+    link(rel='stylesheet', href="stylesheets/sidebar.css")
+    
+    // Latest compiled and minified JavaScript
+    script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
+    script(src="http://www.fuelcdn.com/fuelux/2.6.1/loader.min.js")
+    //script(src="javascripts/BTCTradeDataSource.js")
+    
+
+    script.
+      $(document).ready(function() {
+      
+          console.log('doc ready....');
+          //subscibe to socket
+          var socket = io.connect('http://localhost:3000/');
+          socket.on('gekkotrade', function(data) {
+            console.log('trade = ' + data);
+            $('#BTCeGrid').datagrid({
+              datasource: data,
+              stretchHeight: true
+            });
+          });
+          
+
+      });

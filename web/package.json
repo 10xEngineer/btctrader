@@ -1,0 +1,29 @@
+{
+  "name": "gekko",
+  "version": "0.1.2",
+  "description": "A bitcoin trading bot for auto trading at various exchanges",
+  "keywords": [
+    "trading",
+    "bot",
+    "bitcoin"
+  ],
+  "scripts": {
+    "test": "scripts/run_unit_tests"
+  },
+  "author": "Mike van Rossum <mike@mvr.me>",
+  "dependencies": {
+	"express": "*",
+	"socket.io": "*",
+    "nodejs-websocket": "*",
+    "lodash": "2.x",
+    "async": "0.2.x"
+  },
+  "devDependencies": {
+    "nodeunit": "0.8.2"
+  },
+  "engines": { "node": ">=0.10.x" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/askmike/gekko.git"
+  }
+}

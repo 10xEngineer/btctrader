@@ -17,9 +17,23 @@ delete config.mailer;
 
 var serverConfig = config.webserver;
 
+var express = require("express");
+var app = express();
+var server = require("http").createServer(app);
+var io = require("socket.io").listen(server);
+
 var ws = require("nodejs-websocket");
 var http = require("http");
 var fs = require('fs');
+
+app.get('/daytrader.html', function(req, res){
+  res.send('/frontend/daytrader.html');
+});
+
+
+server.listen(8888, function() {
+	console.log('listening on port %d', server.address().port);
+});
 
 var Server = function() {
   _.bindAll(this);
@@ -49,7 +63,7 @@ Server.prototype.setup = function(next) {
 }
 
 Server.prototype.cacheIndex = function(next) {
-  fs.readFile(__dirname + '/frontend/index.html', 'utf8', _.bind(function(err, file) {
+  fs.readFile(__dirname + '/frontend/daytrader.html', 'utf8', _.bind(function(err, file) {
     if(err)
        throw err;
 
@@ -145,4 +159,5 @@ Server.prototype.handleWSConnection = function(conn) {
   conn.on("close", function(code, reason) {});
   conn.on("error", function(code, reason) {});
 }
+
 module.exports = Server;
