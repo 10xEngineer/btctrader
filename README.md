@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Important note
 
 You are looking at the brand new and completetly different version of Gekko. We've tested it for quite a while though it might be possible that you encounter bugs. If you encounter a bug: check out in [the issues](https://github.com/askmike/gekko/issues/) if we are aware of it and if not create a new one :)
@@ -151,3 +152,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+=======
+btctrader
+=========
+
+bitcoin arbitrage trading platform
+>>>>>>> 127461081e5d71d6dcd9798fe9ad2794203557cc
