@@ -6,6 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var log = require('../../core/log.js');
+var redis = require('redis');
 
 var BTCTradeDataSource = require('./BTCTradeDataSource');
 
@@ -119,6 +120,6 @@ var datasource = new BTCTradeDataSource({
     }
 });
 app.datasource = datasource;
-
+server.listen(3001);
 
 module.exports = app;

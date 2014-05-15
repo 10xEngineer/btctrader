@@ -6,11 +6,11 @@ block content
       //include _sidebar
       //include dashboard
       
-       h2.sub-header Trades
-         .table-responsive
-           table.table.table-bordered.datagrid#BTCeGrid
+      h2.sub-header Trades
+      p#debug
+        Data goes here
 
-    script(src="/socket.io/socket.io.js")
+    script(src="http://localhost:3001/socket.io/socket.io.js")
     // jQuery (necessary for Bootstrap's JavaScript plugins)
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
     // Include all compiled plugins (below), or include individual files as needed
@@ -25,7 +25,7 @@ block content
     // Latest compiled and minified JavaScript
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
     script(src="http://www.fuelcdn.com/fuelux/2.6.1/loader.min.js")
-    //script(src="javascripts/BTCTradeDataSource.js")
+    //script(src="BTCTradeDataSource.js")
     
 
     script.
@@ -33,13 +33,10 @@ block content
       
           console.log('doc ready....');
           //subscibe to socket
-          var socket = io.connect('http://localhost:3000/');
+          var socket = io.connect('http://localhost:3001/');
           socket.on('gekkotrade', function(data) {
-            console.log('trade = ' + data);
-            $('#BTCeGrid').datagrid({
-              datasource: data,
-              stretchHeight: true
-            });
+            console.log(' revd trade = ' + data);
+            $('#debug').text(data);
           });
           
 
