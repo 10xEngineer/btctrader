@@ -7,8 +7,41 @@ block content
       //include dashboard
       
       h2.sub-header Trades
-      p#debug
-        Data goes here
+      .row
+        .col-sm-6.col-lg-6
+          h4 BTC-e
+      .row
+        .col-sm-3.col-lg-3
+          h4 Buy Orders
+        .col-sm-3.col-lg-3
+          h4 Sell Orders
+      .row
+        .col-sm-1.col-lg-1
+          p Price $
+        .col-sm-1.col-lg-1
+          p Quantity
+        .col-sm-1.col-lg-1
+          p USD
+        .col-sm-1.col-lg-1
+          p Price $
+        .col-sm-1.col-lg-1
+          p Quantity
+        .col-sm-1.col-lg-1
+          p USD
+      .row
+        .col-sm-1.col-lg-1
+          ul.list-group#bidprice
+        .col-sm-1.col-lg-1
+          ul.list-group#bidqty
+        .col-sm-1.col-lg-1
+          ul.list-group#bidcurr
+        .col-sm-1.col-lg-1
+          ul.list-group#askprice
+        .col-sm-1.col-lg-1
+          ul.list-group#askqty
+        .col-sm-1.col-lg-1
+          ul.list-group#askcurr
+     
 
     script(src="http://localhost:3001/socket.io/socket.io.js")
     // jQuery (necessary for Bootstrap's JavaScript plugins)
@@ -24,20 +57,46 @@ block content
     
     // Latest compiled and minified JavaScript
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
-    script(src="http://www.fuelcdn.com/fuelux/2.6.1/loader.min.js")
-    //script(src="BTCTradeDataSource.js")
+    script(src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js")
     
 
     script.
       $(document).ready(function() {
       
-          console.log('doc ready....');
+      
+          function additem(element, data, property) {
+            // The ul for output.
+            var list = document.getElementById( element );
+            $('#'+element).empty();
+            // Display the sorted array.
+            _.each( data, function( item ) {
+                var li = document.createElement( "li" );
+                var val = null;
+                if( property != "price_currency" ) {
+                  val = item[property];
+                } else {
+                  val = item["price"] * item["amount"];
+                }
+                li.appendChild( document.createTextNode( val ) );
+                list.appendChild( li );
+            });
+          };
+          
+          //console.log('doc ready....');
           //subscibe to socket
           var socket = io.connect('http://localhost:3001/');
-          socket.on('gekkotrade', function(data) {
-            console.log(' revd trade = ' + data);
-            $('#debug').text(data);
+          socket.on('btce_ask', function(data) {
+            console.log(' revd = ' + JSON.stringify(data));
+            additem("askprice", data["ask_data"], "price");
+            additem("askqty", data["ask_data"], "amount");
+            additem("askcurr", data["ask_data"], "price_currency");
           });
           
+          socket.on('btce_bid', function(data) {
+            console.log(' revd = ' + JSON.stringify(data));
+            additem("bidprice", data["bid_data"], "price");
+            additem("bidqty", data["bid_data"], "amount");
+            additem("bidcurr", data["bid_data"], "price_currency");
+          });
 
       });

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var BTCTradeDataSource = require('../BTCTradeDataSource');
+//var BTCTradeDataSource = require('../BTCTradeDataSource');
 
 /* GET home page. */
 router.get('/', function(req, res) {

@@ -203,7 +203,7 @@ config.redisBeacon = {
     // the name of the event, set
     // an optional prefix to the
     // channel name.
-  channelPrefix: 'gekko',
+  channelPrefix: 'btce',
   broadcast: [
     'trade'
   ]

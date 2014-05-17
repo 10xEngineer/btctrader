@@ -7,8 +7,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var log = require('../../core/log.js');
 var redis = require('redis');
+var lodash,_ = require('lodash');
 
-var BTCTradeDataSource = require('./BTCTradeDataSource');
+var datasource = require('./TradeDataSource.js');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -62,64 +63,17 @@ app.use(function(err, req, res, next) {
 
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
+io.set('log level', 1);
 
 console.log('creating socket');
 io.on('connection', function(client) {
-    const redisClient = redis.createClient()
-    redisClient.subscribe('gekkotrade');
- 
-    redisClient.on("message", function(channel, message) {
-        //Channel is e.g 'score.update'
-        client.emit(channel, message);
-    });
+	var BTCe = datasource('btce', 'BTCe-USD-BTC', client);
  
     client.on('disconnect', function() {
-        redisClient.quit();
+       // destroy datasources
     });
 });
 
-console.log('creating datasource');
-
-var datasource = new BTCTradeDataSource({
-    // Column definitions for Datagrid
-    columns: [{
-        property: 'date',
-        label: 'Date',
-        sortable: false
-    },{
-        property: 'price',
-        label: 'Price',
-        sortable: false
-    },{
-        property: 'amount',
-        label: 'Amount',
-        sortable: false
-    },{
-        property: 'tid',
-        label: 'Txn ID',
-        sortable: false
-    },{
-        property: 'price_currency',
-        label: 'USD',
-        sortable: false
-    },{
-        property: 'item',
-        label: 'Item',
-        sortable: false
-    },{
-        property: 'trade_type',
-        label: 'Trade Type',
-        sortable: false
-    }],
-
-    // Create IMG tag for each returned image
-    formatter: function (items) {
-       // $.each(items, function (index, item) {
-       //     item.image = '<img src="' + flickrUrl(item) + '"></a>';
-       // });
-    }
-});
-app.datasource = datasource;
 server.listen(3001);
 
 module.exports = app;
