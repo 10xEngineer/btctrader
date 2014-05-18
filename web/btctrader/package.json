@@ -17,6 +17,7 @@
     "hiredis": "*",
     "sockjs": "*",
     "rbytes": "*",
-    "websocket-multiplex" : "*"
+    "websocket-multiplex" : "*",
+    "redis": "*"
   }
 }

@@ -2,6 +2,22 @@ var redis = require("redis");
 var log = require("../../core/log.js");
 var lodash,_ = require('lodash');
 
+var prettyprint = function(obj) {
+	var cache = [];
+	JSON.stringify(obj, function(key, value) {
+	    if (typeof value === 'object' && value !== null) {
+	        if (cache.indexOf(value) !== -1) {
+	            // Circular reference found, discard key
+	            return;
+	        }
+	        // Store value in our collection
+	        cache.push(value);
+	    }
+	    console.log(value);
+	    return value;
+	});
+	cache = null; // Enable garbage collection
+};
 
 // This component takes in trades from redis and 
 // converts them into the appropriate structures
@@ -26,11 +42,15 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 	var bidconns = [];
 	
 	askchannel.on('connection', function(conn) {
-		log.debug('registered socket client: ask - '+_exchange);
+		var _conn = conn["conn"];
+		var headers = _conn["headers"];
+		log.debug('registered socket client: ask - '+_exchange+' for conn: '+JSON.stringify(headers));
 		askconns.push(conn);
 	});
 	bidchannel.on('connection', function(conn) {
-		log.debug('registered socket client: bid - '+_exchange);
+		var _conn = conn["conn"];
+		var headers = _conn["headers"];
+		log.debug('registered socket client: bid - '+_exchange+' for conn: '+JSON.stringify(headers));
 		bidconns.push(conn);
 	})
 	
@@ -42,7 +62,7 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 			//if( _.pluck(message, 'market') == _channel) {
 
 				var msgdata = JSON.parse(message, function(key, value) { return value; });
-				log.debug('msg data = '+JSON.stringify(msgdata));
+				//log.debug('msg data = '+JSON.stringify(msgdata));
 				// ensure it is an array
 				//var trade = [].concat(msgdata);
 				// extract the data tuples
@@ -51,7 +71,7 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 				//log.debug(_exchange +' trade = '+JSON.stringify(trade));
 				trade_data.push(trade);
 				
-				log.debug('trade_data: '+JSON.stringify(trade_data));
+				//log.debug('trade_data: '+JSON.stringify(trade_data));
 		
 		
 				/*	function vwap(data) {
@@ -80,7 +100,7 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 					//var ask_vwap = vwap(ask_data);
 					var sort_ask_data = _.sortBy(ask_data, 'price');
 					var ask_data = _.first(sort_ask_data, 5).reverse();
-					console.log(_exchange + ' datasource[ask] = '+ JSON.stringify(ask_data));
+					//console.log(_exchange + ' datasource[ask] = '+ JSON.stringify(ask_data));
 					redisclient.emit(_exchange, {"ask_data": ask_data} );
 					
 					
@@ -96,7 +116,7 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 					var bid_data = _.filter(trade_data, {trade_type: "bid"});
 					var sort_bid_data = _.sortBy(bid_data, 'price');
 					var bid_data = _.first(sort_bid_data, 5);
-					console.log(_exchange + ' datasource[bid] = '+ JSON.stringify(bid_data));
+					//console.log(_exchange + ' datasource[bid] = '+ JSON.stringify(bid_data));
 					redisclient.emit(_exchange, {"bid_data": bid_data} );
 					if (bidconns) {
 						log.debug('publishing bid data for '+_exchange);

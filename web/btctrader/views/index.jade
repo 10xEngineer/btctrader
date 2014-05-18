@@ -1,5 +1,6 @@
 extends layout
 
+
 block content
     .container-fluid
       include header
@@ -7,15 +8,15 @@ block content
       //include dashboard
       
       h2.sub-header Trades
-      .row
+      .row.data-columns="24"
         .col-sm-6.col-lg-6.bg-primary
           h4 BTC-e
-      .row
+      .row.data-columns="24"
         .col-sm-3.col-lg-3.bg-success
           h4 Buy Orders
         .col-sm-3.col-lg-3.bg-warning
           h4 Sell Orders
-      .row
+      .row.data-columns="24"
         .col-sm-1.col-lg-1.bg-success
           p Price $
         .col-sm-1.col-lg-1.bg-success
@@ -28,7 +29,7 @@ block content
           p Quantity
         .col-sm-1.col-lg-1.bg-warning
           p USD
-      .row
+      .row.data-columns="24"
         .col-sm-1.col-lg-1
           ul.list-group#btce_bidprice
         .col-sm-1.col-lg-1
@@ -42,15 +43,15 @@ block content
         .col-sm-1.col-lg-1
           ul.list-group#btce_askcurr
 
-      .row
+      .row.data-columns="24"
         .col-sm-6.col-lg-6.bg-primary
           h4 Bitstamp
-      .row
+      .row.data-columns="24"
         .col-sm-3.col-lg-3.bg-success
           h4 Buy Orders
         .col-sm-3.col-lg-3.bg-warning
           h4 Sell Orders
-      .row
+      .row.data-columns="24"
         .col-sm-1.col-lg-1.bg-success
           p Price $
         .col-sm-1.col-lg-1.bg-success
@@ -63,7 +64,7 @@ block content
           p Quantity
         .col-sm-1.col-lg-1.bg-warning
           p USD
-      .row
+      .row.data-columns="24"
         .col-sm-1.col-lg-1
           ul.list-group#bitstamp_bidprice
         .col-sm-1.col-lg-1
@@ -77,24 +78,8 @@ block content
         .col-sm-1.col-lg-1
           ul.list-group#bitstamp_askcurr
 
-    //script(src="http://localhost:3001/socket.io/socket.io.js")
-    script(src="http://cdn.sockjs.org/sockjs-0.3.min.js")
-    script(src="http://cdn.sockjs.org/websocket-multiplex-0.1.js")
-    // jQuery (necessary for Bootstrap's JavaScript plugins)
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
-    // Include all compiled plugins (below), or include individual files as needed
-    // Latest compiled and minified CSS
-    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
-    // Optional theme
-    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css')
-    link(href="//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css", rel="stylesheet")
-    link(href="//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css", rel="stylesheet")
-    link(rel='stylesheet', href="stylesheets/sidebar.css")
-    
-    // Latest compiled and minified JavaScript
-    script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
-    script(src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js")
 
+    
     script.
       $(document).ready(function() {
       
