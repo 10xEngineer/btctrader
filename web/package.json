@@ -1,6 +1,6 @@
 {
-  "name": "gekko",
-  "version": "0.1.2",
+  "name": "bitblt",
+  "version": "0.0.1",
   "description": "A bitcoin trading bot for auto trading at various exchanges",
   "keywords": [
     "trading",
@@ -10,7 +10,7 @@
   "scripts": {
     "test": "scripts/run_unit_tests"
   },
-  "author": "Mike van Rossum <mike@mvr.me>",
+  "author": "Mike van Rossum <mike@mvr.me> == Gekko, BitBlt == Steve Messina (steve@10xengineer.me)",
   "dependencies": {
 	"express": "*",
 	"socket.io": "*",
@@ -24,6 +24,6 @@
   "engines": { "node": ">=0.10.x" },
   "repository": {
     "type": "git",
-    "url": "https://github.com/askmike/gekko.git"
+    "url": "https://github.com/10xEngineer/gekko.git"
   }
 }

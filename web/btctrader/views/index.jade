@@ -8,42 +8,78 @@ block content
       
       h2.sub-header Trades
       .row
-        .col-sm-6.col-lg-6
+        .col-sm-6.col-lg-6.bg-primary
           h4 BTC-e
       .row
-        .col-sm-3.col-lg-3
+        .col-sm-3.col-lg-3.bg-success
           h4 Buy Orders
-        .col-sm-3.col-lg-3
+        .col-sm-3.col-lg-3.bg-warning
           h4 Sell Orders
       .row
-        .col-sm-1.col-lg-1
+        .col-sm-1.col-lg-1.bg-success
           p Price $
-        .col-sm-1.col-lg-1
+        .col-sm-1.col-lg-1.bg-success
           p Quantity
-        .col-sm-1.col-lg-1
+        .col-sm-1.col-lg-1.bg-success
           p USD
-        .col-sm-1.col-lg-1
+        .col-sm-1.col-lg-1.bg-warning
           p Price $
-        .col-sm-1.col-lg-1
+        .col-sm-1.col-lg-1.bg-warning
           p Quantity
-        .col-sm-1.col-lg-1
+        .col-sm-1.col-lg-1.bg-warning
           p USD
       .row
         .col-sm-1.col-lg-1
-          ul.list-group#bidprice
+          ul.list-group#btce_bidprice
         .col-sm-1.col-lg-1
-          ul.list-group#bidqty
+          ul.list-group#btce_bidqty
         .col-sm-1.col-lg-1
-          ul.list-group#bidcurr
+          ul.list-group#btce_bidcurr
         .col-sm-1.col-lg-1
-          ul.list-group#askprice
+          ul.list-group#btce_askprice
         .col-sm-1.col-lg-1
-          ul.list-group#askqty
+          ul.list-group#btce_askqty
         .col-sm-1.col-lg-1
-          ul.list-group#askcurr
-     
+          ul.list-group#btce_askcurr
 
-    script(src="http://localhost:3001/socket.io/socket.io.js")
+      .row
+        .col-sm-6.col-lg-6.bg-primary
+          h4 Bitstamp
+      .row
+        .col-sm-3.col-lg-3.bg-success
+          h4 Buy Orders
+        .col-sm-3.col-lg-3.bg-warning
+          h4 Sell Orders
+      .row
+        .col-sm-1.col-lg-1.bg-success
+          p Price $
+        .col-sm-1.col-lg-1.bg-success
+          p Quantity
+        .col-sm-1.col-lg-1.bg-success
+          p USD
+        .col-sm-1.col-lg-1.bg-warning
+          p Price $
+        .col-sm-1.col-lg-1.bg-warning
+          p Quantity
+        .col-sm-1.col-lg-1.bg-warning
+          p USD
+      .row
+        .col-sm-1.col-lg-1
+          ul.list-group#bitstamp_bidprice
+        .col-sm-1.col-lg-1
+          ul.list-group#bitstamp_bidqty
+        .col-sm-1.col-lg-1
+          ul.list-group#bitstamp_bidcurr
+        .col-sm-1.col-lg-1
+          ul.list-group#bitstamp_askprice
+        .col-sm-1.col-lg-1
+          ul.list-group#bitstamp_askqty
+        .col-sm-1.col-lg-1
+          ul.list-group#bitstamp_askcurr
+
+    //script(src="http://localhost:3001/socket.io/socket.io.js")
+    script(src="http://cdn.sockjs.org/sockjs-0.3.min.js")
+    script(src="http://cdn.sockjs.org/websocket-multiplex-0.1.js")
     // jQuery (necessary for Bootstrap's JavaScript plugins)
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
     // Include all compiled plugins (below), or include individual files as needed
@@ -58,7 +94,6 @@ block content
     // Latest compiled and minified JavaScript
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
     script(src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js")
-    
 
     script.
       $(document).ready(function() {
@@ -84,19 +119,44 @@ block content
           
           //console.log('doc ready....');
           //subscibe to socket
-          var socket = io.connect('http://localhost:3001/');
-          socket.on('btce_ask', function(data) {
-            console.log(' revd = ' + JSON.stringify(data));
-            additem("askprice", data["ask_data"], "price");
-            additem("askqty", data["ask_data"], "amount");
-            additem("askcurr", data["ask_data"], "price_currency");
-          });
+          //var socket = io.connect('http://localhost:3001/');
+          var sockjs = new SockJS('http://localhost:3001/multiplex/');
+          var multiplexer = new WebSocketMultiplex(sockjs);
           
-          socket.on('btce_bid', function(data) {
+          var btce_ask = multiplexer.channel('btce_ask');
+          var btce_bid = multiplexer.channel('btce_bid');
+          var bitstamp_ask = multiplexer.channel('bitstamp_ask');
+          var bitstamp_bid = multiplexer.channel('bitstamp_bid');
+          
+          btce_ask.onmessage = function(data) {
             console.log(' revd = ' + JSON.stringify(data));
-            additem("bidprice", data["bid_data"], "price");
-            additem("bidqty", data["bid_data"], "amount");
-            additem("bidcurr", data["bid_data"], "price_currency");
-          });
+            var val = JSON.parse(data["data"]);
+            additem("btce_askprice", val, "price");
+            additem("btce_askqty", val, "amount");
+            additem("btce_askcurr", val, "price_currency");
+          };
+          
+          btce_bid.onmessage = function(data) {
+            console.log(' revd = ' + JSON.stringify(data));
+            var val = JSON.parse(data["data"]);
+            additem("btce_bidprice", val, "price");
+            additem("btce_bidqty", val, "amount");
+            additem("btce_bidcurr", val, "price_currency");
+          };
 
+          bitstamp_ask.onmessage = function(data) {
+            console.log(' revd = ' + JSON.stringify(data));
+            var val = JSON.parse(data["data"]);
+            additem("bitstamp_askprice", val, "price");
+            additem("bitstamp_askqty", val, "amount");
+            additem("bitstamp_askcurr",val, "price_currency");
+          };
+          
+          bitstamp_bid.onmessage = function(data) {
+            console.log(' revd = ' + JSON.stringify(data));
+            var val = JSON.parse(data["data"]);
+            additem("bitstamp_bidprice", val, "price");
+            additem("bitstamp_bidqty", val, "amount");
+            additem("bitstamp_bidcurr", val, "price_currency");
+          };
       });

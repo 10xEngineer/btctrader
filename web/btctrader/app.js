@@ -8,6 +8,10 @@ var bodyParser = require('body-parser');
 var log = require('../../core/log.js');
 var redis = require('redis');
 var lodash,_ = require('lodash');
+var sockjs = require('sockjs');
+var websocket_multiplex = require('websocket-multiplex');
+var sockjs_opts = {sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js"};
+
 
 var datasource = require('./TradeDataSource.js');
 
@@ -62,18 +66,19 @@ app.use(function(err, req, res, next) {
 });
 
 var server = http.createServer(app);
-var io = require('socket.io').listen(server);
-io.set('log level', 1);
+//var io = require('socket.io').listen(server);
+//io.set('log level', 1);
+var service = sockjs.createServer(sockjs_opts);
+var multiplexer = new websocket_multiplex.MultiplexServer(service);
+service.installHandlers(server, {prefix:'/multiplex'});
 
-console.log('creating socket');
-io.on('connection', function(client) {
-	var BTCe = datasource('btce', 'BTCe-USD-BTC', client);
- 
-    client.on('disconnect', function() {
-       // destroy datasources
-    });
-});
+var datasources = {
+    "btce": datasource('btce', 'BTCe-USD-BTC', multiplexer),
+    "bitstamp": datasource('bitstamp', 'Bitstamp-USD-BTC', multiplexer),
+    "cexio": datasource('cexio', 'cexio-USD-BTC', multiplexer)
+};
 
-server.listen(3001);
+
+server.listen(3001, '127.0.0.1');
 
 module.exports = app;
