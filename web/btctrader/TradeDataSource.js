@@ -25,6 +25,9 @@ var prettyprint = function(obj) {
 // and republishes them to redis and to the ui via websocket
 var TradeDataSource = function (exchange, channel, multiplexer) {
 	var trade_data = [];
+	var ask_data = [];
+	var bid_data = [];
+	
 	var _exchange = exchange;
 	var _channel = channel;
 	
@@ -46,12 +49,14 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 		var headers = _conn["headers"];
 		log.debug('registered socket client: ask - '+_exchange+' for conn: '+JSON.stringify(headers));
 		askconns.push(conn);
+		conn.write(JSON.stringify(ask_data));
 	});
 	bidchannel.on('connection', function(conn) {
 		var _conn = conn["conn"];
 		var headers = _conn["headers"];
 		log.debug('registered socket client: bid - '+_exchange+' for conn: '+JSON.stringify(headers));
 		bidconns.push(conn);
+		conn.write(JSON.stringify(bid_data));
 	})
 	
 	
@@ -72,24 +77,8 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 				trade_data.push(trade);
 				
 				//log.debug('trade_data: '+JSON.stringify(trade_data));
-		
-		
-				/*	function vwap(data) {
-						var total_vol = 0;
-						var running_vwap = 0;
-						_.each(data, item) {
-							var vol = item["amount"];
-							total_vol += vol;
-							var price = item["price"];
-							running_vwap += (vol * price);
-						}
-						var vwap = 0;
-						if(total_vol != 0)
-							vwap = (running_vwap / total_vol);
-						return vwap;
-					} */
-				//if( _.contains(trade, {trade_type: "ask"}) ) {
-					var ask_data;
+					 
+
 					// HACK
 					// e.g. bitstamp doesn't have bid/ask - so #HACK assume all are ask for now
 					if( trade_data.hasOwnProperty('trade_type') ) {
@@ -97,9 +86,9 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 					} else {
 						ask_data = trade_data;
 					}
-					//var ask_vwap = vwap(ask_data);
+
 					var sort_ask_data = _.sortBy(ask_data, 'price');
-					var ask_data = _.first(sort_ask_data, 5).reverse();
+					ask_data = _.first(sort_ask_data, 5).reverse();
 					//console.log(_exchange + ' datasource[ask] = '+ JSON.stringify(ask_data));
 					redisclient.emit(_exchange, {"ask_data": ask_data} );
 					
@@ -110,12 +99,10 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 							conn.write(JSON.stringify(ask_data));
 						});
 					};
-					//redisclient.emit(_exchange, {"ask_vwap": ask_vwap});
-					//ioclient.emit(_exchange+"_ask_vwap", {"ask_vwap": ask_vwap});
 				//} else {
-					var bid_data = _.filter(trade_data, {trade_type: "bid"});
+					bid_data = _.filter(trade_data, {trade_type: "bid"});
 					var sort_bid_data = _.sortBy(bid_data, 'price');
-					var bid_data = _.first(sort_bid_data, 5);
+					bid_data = _.first(sort_bid_data, 5);
 					//console.log(_exchange + ' datasource[bid] = '+ JSON.stringify(bid_data));
 					redisclient.emit(_exchange, {"bid_data": bid_data} );
 					if (bidconns) {
