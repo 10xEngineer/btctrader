@@ -8,93 +8,100 @@ block content
       //include dashboard
       
       h2.sub-header Trades
-      .row.data-columns="24"
-        .col-sm-6.col-lg-6.bg-primary
-          h4 BTC-e
-      .row.data-columns="24"
-        .col-sm-3.col-lg-3.bg-success
-          h4 Buy Orders
-        .col-sm-3.col-lg-3.bg-warning
-          h4 Sell Orders
-      .row.data-columns="24"
-        .col-sm-1.col-lg-1.bg-success
-          p Price $
-        .col-sm-1.col-lg-1.bg-success
-          p Quantity
-        .col-sm-1.col-lg-1.bg-success
-          p USD
-        .col-sm-1.col-lg-1.bg-warning
-          p Price $
-        .col-sm-1.col-lg-1.bg-warning
-          p Quantity
-        .col-sm-1.col-lg-1.bg-warning
-          p USD
-      .row.data-columns="24"
-        .col-sm-1.col-lg-1
-          ul.list-group#btce_bidprice
-        .col-sm-1.col-lg-1
-          ul.list-group#btce_bidqty
-        .col-sm-1.col-lg-1
-          ul.list-group#btce_bidcurr
-        .col-sm-1.col-lg-1
-          ul.list-group#btce_askprice
-        .col-sm-1.col-lg-1
-          ul.list-group#btce_askqty
-        .col-sm-1.col-lg-1
-          ul.list-group#btce_askcurr
-      .row.data-columns="24"
-        .col-sm-2.col-lg-2
-          p.pull-right vwap
-        .col-sm-1.col-lg-1
-          ul#btce_ask_vwap
-        .col-sm-2.col-lg-2
-          p.pull-right vwap
-        .col-sm-1.col-lg-1
-          ul#btce_bid_vwap
-          
-      .row.data-columns="24"
-        .col-sm-6.col-lg-6.bg-primary
-          h4 Bitstamp
-      .row.data-columns="24"
-        .col-sm-3.col-lg-3.bg-success
-          h4 Buy Orders
-        .col-sm-3.col-lg-3.bg-warning
-          h4 Sell Orders
-      .row.data-columns="24"
-        .col-sm-1.col-lg-1.bg-success
-          p Price $
-        .col-sm-1.col-lg-1.bg-success
-          p Quantity
-        .col-sm-1.col-lg-1.bg-success
-          p USD
-        .col-sm-1.col-lg-1.bg-warning
-          p Price $
-        .col-sm-1.col-lg-1.bg-warning
-          p Quantity
-        .col-sm-1.col-lg-1.bg-warning
-          p USD
-      .row.data-columns="24"
-        .col-sm-1.col-lg-1
-          ul.list-group#bitstamp_bidprice
-        .col-sm-1.col-lg-1
-          ul.list-group#bitstamp_bidqty
-        .col-sm-1.col-lg-1
-          ul.list-group#bitstamp_bidcurr
-        .col-sm-1.col-lg-1
-          ul.list-group#bitstamp_askprice
-        .col-sm-1.col-lg-1
-          ul.list-group#bitstamp_askqty
-        .col-sm-1.col-lg-1
-          ul.list-group#bitstamp_askcurr
-      .row.data-columns="24"
-        .col-sm-2.col-lg-2
-          p.pull-right vwap
-        .col-sm-1.col-lg-1
-          ul#bitstamp_ask_vwap
-        .col-sm-2.col-lg-2
-          p.pull-right vwap
-        .col-sm-1.col-lg-1
-          ul#bitstamp_bid_vwap
+      .row(data-columns="24")
+        .col
+          .row
+            .col-md-4.bg-primary
+              h5 
+            .col-md-4.bg-primary
+              h5 BTC-e
+          .row
+            .col-md-4.bg-success
+              h5 Buy Orders
+            .col-md-4.bg-warning
+              h5 Sell Orders
+          .row
+            .col-md-1.bg-success
+              p Price
+            .col-md-1.bg-success
+              p Quantity
+            .col-md-1.bg-success
+              p USD
+            .col-md-1.bg-warning
+              p Price
+            .col-md-1.bg-warning
+              p Quantity
+            .col-md-1.bg-warning
+              p USD
+            .col-md-2
+          .row
+            .col-md-1
+              ul.list-group#btce_bidprice
+            .col-md-1
+              ul.list-group#btce_bidqty
+            .col-md-1
+              ul.list-group#btce_bidcurr
+            .col-md-1
+              ul.list-group#btce_askprice
+            .col-md-1
+              ul.list-group#btce_askqty
+            .col-md-1
+              ul.list-group#btce_askcurr
+            .col-md-2
+          .row
+            .col-md-2
+              p.pull-right vwap
+            .col-md-1
+              ul#btce_ask_vwap
+            .col-md-2
+              p.pull-right vwap
+            .col-md-1
+              ul#btce_bid_vwap
+            .col-md-2
+          .col
+            .row
+              .col-sm-6.col-lg-6.bg-primary
+                h5 Bitstamp
+            .row
+              .col-sm-3.col-lg-3.bg-success
+                h5 Buy Orders
+              .col-sm-3.col-lg-3.bg-warning
+                h5 Sell Orders
+            .row
+              .col-sm-1.col-lg-1.bg-success
+                p Price
+              .col-sm-1.col-lg-1.bg-success
+                p Quantity
+              .col-sm-1.col-lg-1.bg-success
+                p USD
+              .col-sm-1.col-lg-1.bg-warning
+                p Price
+              .col-sm-1.col-lg-1.bg-warning
+                p Quantity
+              .col-sm-1.col-lg-1.bg-warning
+                p USD
+            .row
+              .col-sm-1.col-lg-1
+                ul.list-group#bitstamp_bidprice
+              .col-sm-1.col-lg-1
+                ul.list-group#bitstamp_bidqty
+              .col-sm-1.col-lg-1
+                ul.list-group#bitstamp_bidcurr
+              .col-sm-1.col-lg-1
+                ul.list-group#bitstamp_askprice
+              .col-sm-1.col-lg-1
+                ul.list-group#bitstamp_askqty
+              .col-sm-1.col-lg-1
+                ul.list-group#bitstamp_askcurr
+            .row
+              .col-sm-2.col-lg-2
+                p.pull-right vwap
+              .col-sm-1.col-lg-1
+                ul#bitstamp_ask_vwap
+              .col-sm-2.col-lg-2
+                p.pull-right vwap
+              .col-sm-1.col-lg-1
+                ul#bitstamp_bid_vwap
 
     
     script.
@@ -143,7 +150,7 @@ block content
           };
           
 
-          var sockjs = new SockJS('http://localhost:3001/multiplex/');
+          var sockjs = new SockJS('http://0.0.0.0:3001/multiplex/');
           var multiplexer = new WebSocketMultiplex(sockjs);
           
           var btce_ask = multiplexer.channel('btce_ask');
