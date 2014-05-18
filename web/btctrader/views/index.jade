@@ -42,7 +42,16 @@ block content
           ul.list-group#btce_askqty
         .col-sm-1.col-lg-1
           ul.list-group#btce_askcurr
-
+      .row.data-columns="24"
+        .col-sm-2.col-lg-2
+          p.pull-right vwap
+        .col-sm-1.col-lg-1
+          ul#btce_ask_vwap
+        .col-sm-2.col-lg-2
+          p.pull-right vwap
+        .col-sm-1.col-lg-1
+          ul#btce_bid_vwap
+          
       .row.data-columns="24"
         .col-sm-6.col-lg-6.bg-primary
           h4 Bitstamp
@@ -77,13 +86,36 @@ block content
           ul.list-group#bitstamp_askqty
         .col-sm-1.col-lg-1
           ul.list-group#bitstamp_askcurr
-
+      .row.data-columns="24"
+        .col-sm-2.col-lg-2
+          p.pull-right vwap
+        .col-sm-1.col-lg-1
+          ul#bitstamp_ask_vwap
+        .col-sm-2.col-lg-2
+          p.pull-right vwap
+        .col-sm-1.col-lg-1
+          ul#bitstamp_bid_vwap
 
     
     script.
       $(document).ready(function() {
       
-      
+        function vwap(data) {
+              var total_vol = 0;
+              var running_vwap = 0;
+              _.each(data, function(item) {
+                  var vol = item["amount"];
+                  total_vol += vol;
+                  var price = item["price"];
+                  running_vwap += (vol * price);
+                  //console.log('vol: '+vol+' * price: '+price+' = running vwap: '+running_vwap);
+              });
+              var vwap = 0;
+              if(total_vol != 0)
+                  vwap = (running_vwap / total_vol);
+              return vwap;
+          };
+                  
           function additem(element, data, property) {
             // The ul for output.
             var list = document.getElementById( element );
@@ -93,18 +125,24 @@ block content
                 var li = document.createElement( "li" );
                 var val = null;
                 if( property != "price_currency" ) {
-                  val = item[property];
+                  val = item[property].toFixed(2);
                 } else {
-                  val = item["price"] * item["amount"];
+                  val = (item["price"] * item["amount"]).toFixed(4);
                 }
                 li.appendChild( document.createTextNode( val ) );
                 list.appendChild( li );
             });
           };
+
+          function addvwap(element, data) {
+            $("#"+element).empty();
+            var vw = document.getElementById( element );
+            var vwapval = vwap(data);
+            //console.log(element+" = "+vwapval);
+            vw.appendChild( document.createTextNode(vwapval.toFixed(2)) );
+          };
           
-          //console.log('doc ready....');
-          //subscibe to socket
-          //var socket = io.connect('http://localhost:3001/');
+
           var sockjs = new SockJS('http://localhost:3001/multiplex/');
           var multiplexer = new WebSocketMultiplex(sockjs);
           
@@ -119,6 +157,7 @@ block content
             additem("btce_askprice", val, "price");
             additem("btce_askqty", val, "amount");
             additem("btce_askcurr", val, "price_currency");
+            addvwap("btce_ask_vwap", val);
           };
           
           btce_bid.onmessage = function(data) {
@@ -127,6 +166,7 @@ block content
             additem("btce_bidprice", val, "price");
             additem("btce_bidqty", val, "amount");
             additem("btce_bidcurr", val, "price_currency");
+            addvwap("btce_bid_vwap", val);
           };
 
           bitstamp_ask.onmessage = function(data) {
@@ -135,6 +175,7 @@ block content
             additem("bitstamp_askprice", val, "price");
             additem("bitstamp_askqty", val, "amount");
             additem("bitstamp_askcurr",val, "price_currency");
+            addvwap("bitstamp_ask_vwap", val);
           };
           
           bitstamp_bid.onmessage = function(data) {
@@ -143,5 +184,6 @@ block content
             additem("bitstamp_bidprice", val, "price");
             additem("bitstamp_bidqty", val, "amount");
             additem("bitstamp_bidcurr", val, "price_currency");
+            addvwap("bitstamp_bid_vwap", val);
           };
       });
