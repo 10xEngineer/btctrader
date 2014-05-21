@@ -20,7 +20,9 @@ html
 
     // Latest compiled and minified JavaScript
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
-    script(src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js")
+    // often fails to load
+    //script(src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js")
+    script(src="javascripts/lodash.compat.min.js")
     script(src="javascripts/gridline.min.js")
   body
     block content
