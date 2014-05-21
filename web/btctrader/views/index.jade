@@ -11,14 +11,12 @@ block content
       .row(data-columns="24")
         .col
           .row
-            .col-md-4.bg-primary
-              h5 
-            .col-md-4.bg-primary
+            .col-md-6.bg-primary
               h5 BTC-e
           .row
-            .col-md-4.bg-success
+            .col-md-3.bg-success
               h5 Buy Orders
-            .col-md-4.bg-warning
+            .col-md-3.bg-warning
               h5 Sell Orders
           .row
             .col-md-1.bg-success
@@ -150,7 +148,7 @@ block content
           };
           
 
-          var sockjs = new SockJS('http://0.0.0.0:3001/multiplex/');
+          var sockjs = new SockJS('http://'+document.domain+':3001/multiplex/');
           var multiplexer = new WebSocketMultiplex(sockjs);
           
           var btce_ask = multiplexer.channel('btce_ask');
