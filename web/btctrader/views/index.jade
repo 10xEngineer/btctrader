@@ -124,18 +124,38 @@ block content
           function additem(element, data, property) {
             // The ul for output.
             var list = document.getElementById( element );
+            list.className="list-group list-unstyled";
             $('#'+element).empty();
             // Display the sorted array.
+            var n = 0;
             _.each( data, function( item ) {
-                var li = document.createElement( "li" );
+
                 var val = null;
                 if( property != "price_currency" ) {
-                  val = item[property].toFixed(2);
+                  if( item && property && item[property] ) {
+                    val = item[property].toFixed(2);
+                  }
                 } else {
-                  val = (item["price"] * item["amount"]).toFixed(4);
+                  if( item ) {
+                    val = (item["price"] * item["amount"]).toFixed(4);
+                  }
                 }
-                li.appendChild( document.createTextNode( val ) );
-                list.appendChild( li );
+               // if( n > list.size() ) {
+                  var li = document.createElement( "li" );
+                  //li.className = "list-group-item";
+                  li.appendChild( document.createTextNode( val ) );
+                  $(li).effect("highlight", {}, 1000);
+                  list.appendChild( li );
+                //} else {
+                  // update the current item
+                  //var li = document.getElementById( element );
+                  //var originalval = li.text();
+                  //li.text( val );
+                  //if( val != originalval ) {
+                   // li.effect("hightlight", {}, 500);
+                  //}
+                //}
+                //n++;
             });
           };
 
