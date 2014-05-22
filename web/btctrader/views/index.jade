@@ -187,15 +187,15 @@ block content
             _.each( data, function( item ) {
 
                 var val = null;
-                if( property != "price" ) {
-                  if( item && property && item[property] ) {
-                    val = item[property].toFixed(2);
-                  }
-                } else {
-                  if( item ) {
+                //if( property != "price" ) {
+                  //if( item && property && item[property] ) {
+                  //  val = item[property].toFixed(2);
+                 // }
+                //} else {
+                //  if( item ) {
                     val = item[property];
-                  }
-                }
+                 // }
+               // }
 
                 var li = document.createElement( "li" );
                 li.appendChild( document.createTextNode( val ) );
