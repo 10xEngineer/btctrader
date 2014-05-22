@@ -7,7 +7,7 @@ block content
       //include _sidebar
       //include dashboard
       
-      h2.sub-header Trades
+      h2.sub-header Orders
       .row(data-columns="24")
         .col
           .row
@@ -102,6 +102,33 @@ block content
             .col-md-1
               ul#bitstamp_bid_vwap
 
+      h2.sub-header Trades
+      .row
+        .col-md-6.bg-primary
+          h5 BTC-e
+      .row
+        .col-md-1.bg-success
+          p Date
+        .col-md-1.bg-success
+          p Txn Id
+        .col-md-1.bg-success
+          p Price
+        .col-md-1.bg-success
+          p Amount
+        .col-md-1.bg-success
+          p Type
+      .row
+        .col-md-1
+          ul.list-group#btce_tradedate
+        .col-md-1
+          ul.list-group#btce_tradeid
+        .col-md-1
+          ul.list-group#btce_tradeprice
+        .col-md-1
+          ul.list-group#btce_tradeqty
+        .col-md-1
+          ul.list-group#btce_tradetype
+
     
     script.
       $(document).ready(function() {
@@ -141,25 +168,46 @@ block content
                     val = (item["price"] * item["amount"]).toFixed(4);
                   }
                 }
-               // if( n > list.size() ) {
-                  var li = document.createElement( "li" );
-                  //li.className = "list-group-item";
-                  li.appendChild( document.createTextNode( val ) );
-                  $(li).effect("highlight", {}, 1000);
-                  list.appendChild( li );
-                //} else {
-                  // update the current item
-                  //var li = document.getElementById( element );
-                  //var originalval = li.text();
-                  //li.text( val );
-                  //if( val != originalval ) {
-                   // li.effect("hightlight", {}, 500);
-                  //}
-                //}
-                //n++;
+
+                var li = document.createElement( "li" );
+                li.appendChild( document.createTextNode( val ) );
+                $(li).effect("highlight", {}, 1000);
+                list.appendChild( li );
             });
           };
 
+
+          function pushitem(element, data, property) {
+            // The ul for output.
+            var list = document.getElementById( element );
+            list.className="list-group list-unstyled";
+            $('#'+element).empty();
+            // Display the sorted array.
+            var n = 0;
+            _.each( data, function( item ) {
+
+                var val = null;
+                if( property != "price" ) {
+                  if( item && property && item[property] ) {
+                    val = item[property].toFixed(2);
+                  }
+                } else {
+                  if( item ) {
+                    val = item[property];
+                  }
+                }
+
+                var li = document.createElement( "li" );
+                li.appendChild( document.createTextNode( val ) );
+                $(li).effect("highlight", {}, 1000);
+                //if( list.size() == 0 ) {
+                  list.appendChild( li );
+                //} else {
+                 // list.insertBefore( li, list.firstChild() )
+                //}
+            });
+          };
+          
           function addvwap(element, data) {
             $("#"+element).empty();
             var vw = document.getElementById( element );
@@ -176,7 +224,18 @@ block content
           var btce_bid = multiplexer.channel('btce_bid');
           var bitstamp_ask = multiplexer.channel('bitstamp_ask');
           var bitstamp_bid = multiplexer.channel('bitstamp_bid');
-          
+          var btce_trades = multiplexer.channel('btce_trades');
+
+          btce_trades.onmessage = function(data) {
+            console.log(' trade = ' + JSON.stringify(data));
+            var val = JSON.parse(data["data"]);
+            pushitem("btce_tradedate", val, "date");
+            pushitem("btce_tradeid", val, "tid");
+            pushitem("btce_tradeprice", val, "price");
+            pushitem("btce_tradeqty", val, "amount");
+            pushitem("btce_tradetype", val, "trade_type");
+          };
+                    
           btce_ask.onmessage = function(data) {
             console.log(' revd = ' + JSON.stringify(data));
             var val = JSON.parse(data["data"]);

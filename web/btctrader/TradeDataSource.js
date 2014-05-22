@@ -40,9 +40,11 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 	log.debug('registering socket channels: '+_exchange);
 	var askchannel = multiplexer.registerChannel(_exchange+'_ask');
 	var bidchannel = multiplexer.registerChannel(_exchange+'_bid');
+	var tradechannel = multiplexer.registerChannel(_exchange+'_trades');
 	
 	var askconns = [];
 	var bidconns = [];
+	var tradeconns = [];
 	
 	askchannel.on('connection', function(conn) {
 		var _conn = conn["conn"];
@@ -57,8 +59,14 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 		log.debug('registered socket client: bid - '+_exchange+' for conn: '+JSON.stringify(headers));
 		bidconns.push(conn);
 		conn.write(JSON.stringify(bid_data));
-	})
-	
+	});
+	tradechannel.on('connection', function(conn) {
+		var _conn = conn["conn"];
+		var headers = _conn["headers"];
+		log.debug('registered socket client: trades - '+_exchange+' for conn: '+JSON.stringify(headers));
+		tradeconns.push(conn);
+		conn.write(JSON.stringify(trade_data));
+	});
 	
 	redisclient.on("message", function(channel, message) {
 	    log.debug('channel: '+channel + '    message: '+message);
@@ -75,7 +83,11 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 				var trade = msgdata["data"];
 				//log.debug(_exchange +' trade = '+JSON.stringify(trade));
 				trade_data.push(trade);
-				
+				if( tradeconns ) {
+					_.each(tradeconns, function(conn) {
+						conn.write(JSON.stringify(trade_data));
+					});
+				}
 				//log.debug('trade_data: '+JSON.stringify(trade_data));
 					 
 
