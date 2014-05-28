@@ -109,7 +109,7 @@ block content
         .col-md-6.col-sm-12.bg-primary
           h5 BTC-e
       .row
-        .col-md-1.col-sm-2.bg-success
+        .col-md-2.col-sm-4.bg-success
           p Date
         .col-md-1.col-sm-2.bg-success
           p Txn Id
@@ -119,10 +119,8 @@ block content
           p Amount
         .col-md-1.col-sm-2.bg-success
           p Type
-        .col-md-1.col-sm-2.bg-success
-          p ---
       .row
-        .col-md-1.col-sm-2
+        .col-md-2.col-sm-4
           ul.list-group#btce_tradedate
         .col-md-1.col-sm-2
           ul.list-group#btce_tradeid
@@ -132,7 +130,6 @@ block content
           ul.list-group#btce_tradeqty
         .col-md-1.col-sm-2
           ul.list-group#btce_tradetype
-        .col-md-1.col-sm-2
 
     
     script.
@@ -195,8 +192,13 @@ block content
                 if( property == "date" ) {
                   //if( item && property && item[property] ) {
                   //  val = item[property].toFixed(2);
-                  var t = new Date(item[property]*1000);
-                  val = t;
+                  var m = new Date(item[property]*1000);
+                  val = m.getUTCFullYear() +"/"+
+                  ("0" + (m.getUTCMonth()+1)).slice(-2) +"/"+
+                  ("0" + m.getUTCDate()).slice(-2) + " " +
+                  ("0" + m.getUTCHours()).slice(-2) + ":" +
+                  ("0" + m.getUTCMinutes()).slice(-2) + ":" +
+                  ("0" + m.getUTCSeconds()).slice(-2);
                  // }
                 } else {
                 //  if( item ) {
