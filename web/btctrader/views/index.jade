@@ -192,15 +192,17 @@ block content
             _.each( data, function( item ) {
 
                 var val = null;
-                //if( property != "price" ) {
+                if( property == "date" ) {
                   //if( item && property && item[property] ) {
                   //  val = item[property].toFixed(2);
+                  var t = new Date(item[property]*1000);
+                  val = t;
                  // }
-                //} else {
+                } else {
                 //  if( item ) {
                     val = item[property];
                  // }
-               // }
+                }
 
                 var li = document.createElement( "li" );
                 li.appendChild( document.createTextNode( val ) );
