@@ -33,6 +33,7 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 	
 	log.debug(_exchange + ' datasource - creating redis client');
 	var redisclient = redis.createClient();
+	var rediswriter = redis.createClient();
 	redisclient.on("subscribe", function(channel, count) {
 	    log.debug(_exchange + ' subscribed.. '+_channel);
 	});
@@ -88,6 +89,11 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 						conn.write(JSON.stringify(trade_data));
 					});
 				}
+				var key = _exchange + '.trade_data';
+				rediswriter.hmset(key, 'trade_data', trade, function(error, result) {
+				    if (error) log.debug('Error: ' + error);
+				    else log.debug('trade data saved!');
+				});
 				//log.debug('trade_data: '+JSON.stringify(trade_data));
 					 
 
@@ -103,7 +109,11 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 					ask_data = _.first(sort_ask_data, 5).reverse();
 					//console.log(_exchange + ' datasource[ask] = '+ JSON.stringify(ask_data));
 					redisclient.emit(_exchange, {"ask_data": ask_data} );
-					
+					var key = _exchange + '.ask_data';
+					rediswriter.hmset(key, 'ask_data', ask_data, function(error, result) {
+					    if (error) log.debug('Error: ' + error);
+					    else log.debug('ask data saved!');
+					});					
 					
 					if (askconns) {
 						log.debug('publishing ask data for '+_exchange);
@@ -117,6 +127,12 @@ var TradeDataSource = function (exchange, channel, multiplexer) {
 					bid_data = _.first(sort_bid_data, 5);
 					//console.log(_exchange + ' datasource[bid] = '+ JSON.stringify(bid_data));
 					redisclient.emit(_exchange, {"bid_data": bid_data} );
+					var key = _exchange + '.bid_data';
+					rediswriter.hmset(key, 'bid_data', bid_data, function(error, result) {
+					    if (error) log.debug('Error: ' + error);
+					    else log.debug('Bid data saved!');
+					});
+					
 					if (bidconns) {
 						log.debug('publishing bid data for '+_exchange);
 						_.each(bidconns, function(conn) {
